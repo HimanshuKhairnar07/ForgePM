@@ -1,0 +1,14 @@
+CREATE TABLE users (
+ id UUID PRIMARY KEY, full_name VARCHAR(120) NOT NULL, email VARCHAR(254) NOT NULL UNIQUE,
+ password_hash VARCHAR(100) NOT NULL, avatar_url TEXT, is_active BOOLEAN NOT NULL DEFAULT TRUE,
+ created_at TIMESTAMPTZ NOT NULL DEFAULT now(), updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+CREATE TABLE workspaces (
+ id UUID PRIMARY KEY, name VARCHAR(120) NOT NULL, slug VARCHAR(120) NOT NULL UNIQUE,
+ owner_user_id UUID NOT NULL REFERENCES users(id), created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+CREATE TABLE workspace_members (
+ id UUID PRIMARY KEY, workspace_id UUID NOT NULL REFERENCES workspaces(id), user_id UUID NOT NULL REFERENCES users(id),
+ role VARCHAR(16) NOT NULL CHECK (role IN ('OWNER','ADMIN','MEMBER','VIEWER')),
+ joined_at TIMESTAMPTZ NOT NULL DEFAULT now(), UNIQUE(workspace_id,user_id)
+);

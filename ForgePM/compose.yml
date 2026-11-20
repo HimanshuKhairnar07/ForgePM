@@ -1,0 +1,30 @@
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: forgepm
+      POSTGRES_USER: forgepm
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD:-forgepm}
+    healthcheck:
+      test: [CMD-SHELL, 'pg_isready -U forgepm -d forgepm']
+      interval: 3s
+      timeout: 3s
+      retries: 20
+    volumes:
+      - postgres:/var/lib/postgresql/data
+  api:
+    build: ./backend
+    environment:
+      DATABASE_URL: jdbc:postgresql://db:5432/forgepm
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD:-forgepm}
+      JWT_SECRET: ${JWT_SECRET:?Set JWT_SECRET in .env}
+    depends_on:
+      db:
+        condition: service_healthy
+  web:
+    build: ./frontend
+    ports:
+      - '127.0.0.1:8080:80'
+    depends_on: [api]
+volumes:
+  postgres:
