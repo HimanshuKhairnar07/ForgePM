@@ -1,2 +1,2 @@
 # ForgePM
-ForgePM is a Jira-inspired project management app in development, built with Spring Boot, React, TypeScript, and PostgreSQL. The first release includes secure account registration, sign-in, and a protected profile.
+ForgePM is a full-stack portfolio project designed to help software teams organize projects, track issues, and manage work on a Kanban board. Its first milestone delivers the authentication foundation: BCrypt password hashing, JWT-based sign-in, a protected profile API, and Flyway database migrations. The project includes PostgreSQL integration tests and local setup instructions. Workspace management, issue tracking, and Kanban workflows are planned milestones, not current features.
